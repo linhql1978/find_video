@@ -117,16 +117,16 @@ img_test=cv2.imread('images_test/cycle/bycycle.jpeg',cv2.IMREAD_GRAYSCALE) # Đ�
 img_test=cv2.resize(src=img_test,dsize=(dim,dim*2)) # Resize ảnh về (64,128) <=> (w,h)
 vector_img_test=hog(img_test) # Sử dụng HOG trích xuất đắc trưng của input
 
-videos_dir=glob.glob('../demo2/frames_dir/*.mp4')
+videos_dir=glob.glob('frames_dir/*.mp4') # Lấy danh sách các folder chứa các frame của các video
 for video_dir in videos_dir:
     video_basename=os.path.basename(video_dir)
-    frames=glob.glob('../demo2/frames_dir/'+video_basename+'/*.jpg')
     X=[] # Danh sách chứa các đặc trưng cho images trong video
     list_distance=[]
+    frames=glob.glob('frames_dir/'+video_basename+'/*.jpg') # Lấy danh sách các frame của video
     for frame in frames:
         img=cv2.imread(frame,cv2.IMREAD_GRAYSCALE)
         img=cv2.resize(src=img,dsize=(dim,dim*2))
-        vector_img=hog(img)
+        vector_img=hog(img) # Trích xuất đặc trưng hình dạnh sử dụng HOG
         X.append(vector_img) # Lưu vector đặc trưng của image để phân cụm và tính toán
         pass
     centers,labels,_=kmeans(np.array(X),K) # Sử dụng Kmeans để phân cụm các frame của video với số cụm bằng K
@@ -145,5 +145,6 @@ dis_min=min(list_distance_videos) # Lấy khoảng cách nhỏ nhất của inpu
 for i in range(len(list_distance_videos)):
     if(dis_min==list_distance_videos[i]):
         print('result video: ',list_videos[i]) # In ra video
+        break
         pass
     pass
